@@ -1,0 +1,130 @@
+schema_name: shared_contract_envelope
+schema_version: "1.0.0"
+description: >
+  Canonical envelope for machine-readable contracts produced by agents in the ML
+  multi-agent framework. Domain-specific payloads should be nested under
+  `contract_payload` while preserving this envelope unchanged.
+
+required_fields:
+  - contract_type
+  - contract_name
+  - version
+  - owner
+  - status
+  - lifecycle_phase
+  - primary_agent
+  - upstream_dependencies
+  - downstream_consumers
+  - entity_grain
+  - time_grain
+  - partition_key
+  - required_inputs
+  - required_outputs
+  - validation_rules
+  - assumptions
+  - open_questions
+  - contract_payload
+
+field_schema:
+  contract_type:
+    type: string
+    description: High-level kind such as data_contract, feature_contract, evaluation_contract.
+  contract_name:
+    type: string
+    description: Canonical unique identifier within the project.
+  version:
+    type: string
+    description: Semantic or timestamped contract version.
+  owner:
+    type: string
+    description: Team, role, or person responsible for the contract.
+  status:
+    type: string
+    allowed_values:
+      - draft
+      - active
+      - deprecated
+      - blocked
+    description: Governance state of the contract.
+  lifecycle_phase:
+    type: string
+    allowed_values:
+      - intake_and_scope
+      - repository_runtime_foundation
+      - exploratory_analysis_and_metric_definition
+      - data_foundation_and_contracts
+      - dataset_feature_target_integrity
+      - training_evaluation_and_registry
+      - inference_outputs_and_decisioning
+      - monitoring_operational_resilience
+      - final_integration_and_release_gates
+  primary_agent:
+    type: string
+    description: Canonical agent responsible for producing or governing the contract.
+  upstream_dependencies:
+    type: list
+    item_schema:
+      dependency_name: string
+      dependency_type: string
+      required: boolean
+      notes: string
+  downstream_consumers:
+    type: list
+    item_schema:
+      consumer_name: string
+      consumer_type: string
+      notes: string
+  entity_grain:
+    type: string
+    description: Canonical one-row-per definition for the contract.
+  time_grain:
+    type: string
+    description: Canonical time or event resolution such as day, event, scoring_timestamp.
+  partition_key:
+    type: string
+    nullable: true
+    description: Primary partition column or storage partition key if applicable.
+  required_inputs:
+    type: list
+    item_schema:
+      input_name: string
+      source: string
+      description: string
+  required_outputs:
+    type: list
+    item_schema:
+      output_name: string
+      destination: string
+      description: string
+  validation_rules:
+    type: list
+    description: Executable or reviewable rules that must hold for the contract.
+    item_schema:
+      rule_id: string
+      severity: string
+      description: string
+      check_type: string
+  assumptions:
+    type: list
+    description: Explicit assumptions accepted temporarily or pending confirmation.
+    item_type: string
+  open_questions:
+    type: list
+    description: Unresolved items that block or weaken downstream confidence.
+    item_type: string
+  contract_payload:
+    type: map
+    description: Domain-specific body owned by the producing agent.
+
+shared_severity_scale:
+  - CRITICAL
+  - HIGH
+  - MEDIUM
+  - LOW
+
+shared_validation_statuses:
+  - PASS
+  - FAIL
+  - PARTIAL
+  - NOT_VERIFIED
+  - NOT_APPLICABLE

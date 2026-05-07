@@ -1,0 +1,202 @@
+map_version: 1.0.1
+supported_status_lifecycle:
+- active
+- experimental
+- deprecated
+- archived
+phases:
+- lifecycle_phase: data_foundation_and_contracts
+  primary:
+  - agent_name: data_source_contract_auditor
+    status: active
+    prompt_path: agents/data_foundation_and_contracts/primary/data_source_contract_auditor.md
+  - agent_name: schema_mapping
+    status: active
+    prompt_path: agents/data_foundation_and_contracts/primary/schema_mapping.md
+  - agent_name: sql_generator
+    status: active
+    prompt_path: agents/data_foundation_and_contracts/primary/sql_generator.md
+  - agent_name: warehouse_metadata_extractor
+    status: active
+    prompt_path: agents/data_foundation_and_contracts/primary/warehouse_metadata_extractor.md
+  specialist:
+  - agent_name: join_integrity
+    status: active
+    prompt_path: agents/data_foundation_and_contracts/specialist/join_integrity.md
+  - agent_name: sql_partition_pruning
+    status: active
+    prompt_path: agents/data_foundation_and_contracts/specialist/sql_partition_pruning.md
+  child:
+  - agent_name: contract_compiler_validator
+    status: active
+    prompt_path: agents/data_foundation_and_contracts/primary/contract_compiler_validator.md
+- lifecycle_phase: dataset_feature_target_integrity
+  primary:
+  - agent_name: feature_engineering_auditor
+    status: active
+    prompt_path: agents/dataset_feature_target_integrity/primary/feature_engineering_auditor.md
+  - agent_name: label_quality_and_ground_truth_auditor
+    status: active
+    prompt_path: agents/dataset_feature_target_integrity/primary/label_quality_and_ground_truth_auditor.md
+  - agent_name: label_target_definition_agent
+    status: active
+    prompt_path: agents/dataset_feature_target_integrity/primary/label_target_definition_agent.md
+  specialist:
+  - agent_name: business_logic_auditor
+    status: active
+    prompt_path: agents/dataset_feature_target_integrity/specialist/business_logic_auditor.md
+  - agent_name: feature_availability_at_time_auditor
+    status: active
+    prompt_path: agents/dataset_feature_target_integrity/specialist/feature_availability_at_time_auditor.md
+  - agent_name: feature_engineering_relevance_auditor
+    status: experimental
+    prompt_path: agents/dataset_feature_target_integrity/specialist/feature_engineering_relevance_auditor.md
+  - agent_name: temporal_leakage_auditor
+    status: active
+    prompt_path: agents/dataset_feature_target_integrity/specialist/temporal_leakage_auditor.md
+  child: []
+- lifecycle_phase: exploratory_analysis_and_metric_definition
+  primary:
+  - agent_name: analytical_metrics_auditor
+    status: active
+    prompt_path: agents/exploratory_analysis_and_metric_definition/primary/analytical_metrics_auditor.md
+  - agent_name: business_insight_quality_auditor
+    status: active
+    prompt_path: agents/exploratory_analysis_and_metric_definition/primary/business_insight_quality_auditor.md
+  - agent_name: eda_auditor
+    status: active
+    prompt_path: agents/exploratory_analysis_and_metric_definition/primary/eda_auditor.md
+  specialist:
+  - agent_name: cohort_logic_auditor
+    status: experimental
+    prompt_path: agents/exploratory_analysis_and_metric_definition/specialist/cohort_logic_auditor.md
+  - agent_name: segment_naming_stability_auditor
+    status: experimental
+    prompt_path: agents/exploratory_analysis_and_metric_definition/specialist/segment_naming_stability_auditor.md
+  - agent_name: wau_mau_dau_consistency_auditor
+    status: experimental
+    prompt_path: agents/exploratory_analysis_and_metric_definition/specialist/wau_mau_dau_consistency_auditor.md
+  child: []
+- lifecycle_phase: final_integration_and_release_gates
+  primary:
+  - agent_name: acceptance_criteria_verifier
+    status: active
+    prompt_path: agents/final_integration_and_release_gates/primary/acceptance_criteria_verifier.md
+  - agent_name: end_to_end_ml_auditor
+    status: active
+    prompt_path: agents/final_integration_and_release_gates/primary/end_to_end_ml_auditor.md
+  - agent_name: integration_consistency
+    status: active
+    prompt_path: agents/final_integration_and_release_gates/primary/integration_consistency.md
+  - agent_name: production_readiness_auditor
+    status: active
+    prompt_path: agents/final_integration_and_release_gates/primary/production_readiness_auditor.md
+  specialist: []
+  child: []
+- lifecycle_phase: inference_outputs_and_decisioning
+  primary:
+  - agent_name: inference_pipeline_auditor
+    status: active
+    prompt_path: agents/inference_outputs_and_decisioning/primary/inference_pipeline_auditor.md
+  - agent_name: offline_to_online_consistency_auditor
+    status: active
+    prompt_path: agents/inference_outputs_and_decisioning/primary/offline_to_online_consistency_auditor.md
+  - agent_name: output_artifacts_auditor
+    status: active
+    prompt_path: agents/inference_outputs_and_decisioning/primary/output_artifacts_auditor.md
+  specialist: []
+  child:
+  - agent_name: promotion_release_gate_agent
+    status: active
+    prompt_path: agents/inference_outputs_and_decisioning/primary/promotion_release_gate_agent.md
+- lifecycle_phase: intake_and_scope
+  primary:
+  - agent_name: multi_agent_orchestrator
+    status: active
+    prompt_path: agents/intake_and_scope/primary/multi_agent_orchestrator.md
+  - agent_name: task_triage_router
+    status: active
+    prompt_path: agents/intake_and_scope/primary/task_triage_router.md
+  specialist:
+  - agent_name: overengineering_control
+    status: experimental
+    prompt_path: agents/intake_and_scope/specialist/overengineering_control.md
+  child: []
+- lifecycle_phase: monitoring_operational_resilience
+  primary:
+  - agent_name: data_drift_auditor
+    status: active
+    prompt_path: agents/monitoring_operational_resilience/primary/data_drift_auditor.md
+  - agent_name: model_monitoring_auditor
+    status: active
+    prompt_path: agents/monitoring_operational_resilience/primary/model_monitoring_auditor.md
+  - agent_name: testing_and_validation_auditor
+    status: active
+    prompt_path: agents/monitoring_operational_resilience/primary/testing_and_validation_auditor.md
+  specialist:
+  - agent_name: config_governance_auditor
+    status: active
+    prompt_path: agents/monitoring_operational_resilience/specialist/config_governance_auditor.md
+  - agent_name: deployment_and_orchestration_auditor
+    status: active
+    prompt_path: agents/monitoring_operational_resilience/specialist/deployment_and_orchestration_auditor.md
+  - agent_name: pipeline_idempotency_auditor
+    status: active
+    prompt_path: agents/monitoring_operational_resilience/specialist/pipeline_idempotency_auditor.md
+  - agent_name: silent_fallback_auditor
+    status: active
+    prompt_path: agents/monitoring_operational_resilience/specialist/silent_fallback_auditor.md
+  - agent_name: unit_test_coverage_auditor
+    status: experimental
+    prompt_path: agents/monitoring_operational_resilience/specialist/unit_test_coverage_auditor.md
+  child:
+  - agent_name: incident_rollback_readiness_agent
+    status: active
+    prompt_path: agents/monitoring_operational_resilience/primary/incident_rollback_readiness_agent.md
+  - agent_name: preflight_execution_guard
+    status: active
+    prompt_path: agents/monitoring_operational_resilience/primary/preflight_execution_guard.md
+- lifecycle_phase: repository_runtime_foundation
+  primary:
+  - agent_name: dependency_package_auditor
+    status: active
+    prompt_path: agents/repository_runtime_foundation/primary/dependency_package_auditor.md
+  - agent_name: environment_and_runtime_auditor
+    status: active
+    prompt_path: agents/repository_runtime_foundation/primary/environment_and_runtime_auditor.md
+  - agent_name: ml_repository_architect
+    status: active
+    prompt_path: agents/repository_runtime_foundation/primary/ml_repository_architect.md
+  specialist:
+  - agent_name: code_patch_reviewer
+    status: experimental
+    prompt_path: agents/repository_runtime_foundation/specialist/code_patch_reviewer.md
+  - agent_name: documentation_runbook_auditor
+    status: active
+    prompt_path: agents/repository_runtime_foundation/specialist/documentation_runbook_auditor.md
+  - agent_name: git_hygiene_auditor
+    status: active
+    prompt_path: agents/repository_runtime_foundation/specialist/git_hygiene_auditor.md
+  - agent_name: security_auditor
+    status: active
+    prompt_path: agents/repository_runtime_foundation/specialist/security_auditor.md
+  child: []
+- lifecycle_phase: training_evaluation_and_registry
+  primary:
+  - agent_name: mlflow_registry_auditor
+    status: active
+    prompt_path: agents/training_evaluation_and_registry/primary/mlflow_registry_auditor.md
+  - agent_name: model_evaluation_threshold_auditor
+    status: active
+    prompt_path: agents/training_evaluation_and_registry/primary/model_evaluation_threshold_auditor.md
+  - agent_name: training_pipeline_auditor
+    status: active
+    prompt_path: agents/training_evaluation_and_registry/primary/training_pipeline_auditor.md
+  specialist:
+  - agent_name: memory_and_performance_auditor
+    status: experimental
+    prompt_path: agents/training_evaluation_and_registry/specialist/memory_and_performance_auditor.md
+  - agent_name: model_comparison_auditor
+    status: experimental
+    prompt_path: agents/training_evaluation_and_registry/specialist/model_comparison_auditor.md
+  child: []

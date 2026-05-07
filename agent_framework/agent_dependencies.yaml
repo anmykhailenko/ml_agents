@@ -1,0 +1,585 @@
+graph_version: 1.0.0
+supported_status_lifecycle:
+- active
+- experimental
+- deprecated
+- archived
+strict_final_gate_order:
+- integration_consistency
+- production_readiness_auditor
+- end_to_end_ml_auditor
+- acceptance_criteria_verifier
+agents:
+- agent_name: task_triage_router
+  lifecycle_phase: intake_and_scope
+  role_type: primary
+  status: active
+  prompt_path: agents/intake_and_scope/primary/task_triage_router.md
+  upstream_dependencies: []
+  downstream_dependencies:
+  - multi_agent_orchestrator
+  - overengineering_control
+- agent_name: multi_agent_orchestrator
+  lifecycle_phase: intake_and_scope
+  role_type: primary
+  status: active
+  prompt_path: agents/intake_and_scope/primary/multi_agent_orchestrator.md
+  upstream_dependencies:
+  - task_triage_router
+  downstream_dependencies:
+  - ml_repository_architect
+  - warehouse_metadata_extractor
+  - training_pipeline_auditor
+  - integration_consistency
+- agent_name: overengineering_control
+  lifecycle_phase: intake_and_scope
+  role_type: specialist
+  status: active
+  prompt_path: agents/intake_and_scope/specialist/overengineering_control.md
+  upstream_dependencies:
+  - task_triage_router
+  downstream_dependencies:
+  - multi_agent_orchestrator
+  - ml_repository_architect
+- agent_name: ml_repository_architect
+  lifecycle_phase: repository_runtime_foundation
+  role_type: primary
+  status: active
+  prompt_path: agents/repository_runtime_foundation/primary/ml_repository_architect.md
+  upstream_dependencies:
+  - multi_agent_orchestrator
+  downstream_dependencies:
+  - environment_and_runtime_auditor
+  - documentation_runbook_auditor
+- agent_name: environment_and_runtime_auditor
+  lifecycle_phase: repository_runtime_foundation
+  role_type: primary
+  status: active
+  prompt_path: agents/repository_runtime_foundation/primary/environment_and_runtime_auditor.md
+  upstream_dependencies:
+  - ml_repository_architect
+  downstream_dependencies:
+  - preflight_execution_guard
+  - production_readiness_auditor
+- agent_name: dependency_package_auditor
+  lifecycle_phase: repository_runtime_foundation
+  role_type: primary
+  status: active
+  prompt_path: agents/repository_runtime_foundation/primary/dependency_package_auditor.md
+  upstream_dependencies:
+  - ml_repository_architect
+  downstream_dependencies:
+  - training_pipeline_auditor
+  - production_readiness_auditor
+- agent_name: security_auditor
+  lifecycle_phase: repository_runtime_foundation
+  role_type: specialist
+  status: active
+  prompt_path: agents/repository_runtime_foundation/specialist/security_auditor.md
+  upstream_dependencies:
+  - environment_and_runtime_auditor
+  downstream_dependencies:
+  - production_readiness_auditor
+  - documentation_runbook_auditor
+- agent_name: git_hygiene_auditor
+  lifecycle_phase: repository_runtime_foundation
+  role_type: specialist
+  status: active
+  prompt_path: agents/repository_runtime_foundation/specialist/git_hygiene_auditor.md
+  upstream_dependencies:
+  - ml_repository_architect
+  downstream_dependencies:
+  - code_patch_reviewer
+  - production_readiness_auditor
+- agent_name: documentation_runbook_auditor
+  lifecycle_phase: repository_runtime_foundation
+  role_type: specialist
+  status: active
+  prompt_path: agents/repository_runtime_foundation/specialist/documentation_runbook_auditor.md
+  upstream_dependencies:
+  - ml_repository_architect
+  - environment_and_runtime_auditor
+  downstream_dependencies:
+  - production_readiness_auditor
+  - acceptance_criteria_verifier
+- agent_name: code_patch_reviewer
+  lifecycle_phase: repository_runtime_foundation
+  role_type: specialist
+  status: active
+  prompt_path: agents/repository_runtime_foundation/specialist/code_patch_reviewer.md
+  upstream_dependencies:
+  - git_hygiene_auditor
+  downstream_dependencies:
+  - acceptance_criteria_verifier
+- agent_name: eda_auditor
+  lifecycle_phase: exploratory_analysis_and_metric_definition
+  role_type: primary
+  status: active
+  prompt_path: agents/exploratory_analysis_and_metric_definition/primary/eda_auditor.md
+  upstream_dependencies:
+  - task_triage_router
+  downstream_dependencies:
+  - analytical_metrics_auditor
+  - business_insight_quality_auditor
+- agent_name: analytical_metrics_auditor
+  lifecycle_phase: exploratory_analysis_and_metric_definition
+  role_type: primary
+  status: active
+  prompt_path: agents/exploratory_analysis_and_metric_definition/primary/analytical_metrics_auditor.md
+  upstream_dependencies:
+  - eda_auditor
+  downstream_dependencies:
+  - business_insight_quality_auditor
+  - model_monitoring_auditor
+- agent_name: business_insight_quality_auditor
+  lifecycle_phase: exploratory_analysis_and_metric_definition
+  role_type: primary
+  status: active
+  prompt_path: agents/exploratory_analysis_and_metric_definition/primary/business_insight_quality_auditor.md
+  upstream_dependencies:
+  - eda_auditor
+  - analytical_metrics_auditor
+  downstream_dependencies:
+  - acceptance_criteria_verifier
+- agent_name: wau_mau_dau_consistency_auditor
+  lifecycle_phase: exploratory_analysis_and_metric_definition
+  role_type: specialist
+  status: active
+  prompt_path: agents/exploratory_analysis_and_metric_definition/specialist/wau_mau_dau_consistency_auditor.md
+  upstream_dependencies:
+  - analytical_metrics_auditor
+  downstream_dependencies:
+  - model_monitoring_auditor
+- agent_name: cohort_logic_auditor
+  lifecycle_phase: exploratory_analysis_and_metric_definition
+  role_type: specialist
+  status: active
+  prompt_path: agents/exploratory_analysis_and_metric_definition/specialist/cohort_logic_auditor.md
+  upstream_dependencies:
+  - analytical_metrics_auditor
+  downstream_dependencies:
+  - label_target_definition_agent
+  - model_monitoring_auditor
+- agent_name: segment_naming_stability_auditor
+  lifecycle_phase: exploratory_analysis_and_metric_definition
+  role_type: specialist
+  status: active
+  prompt_path: agents/exploratory_analysis_and_metric_definition/specialist/segment_naming_stability_auditor.md
+  upstream_dependencies:
+  - analytical_metrics_auditor
+  downstream_dependencies:
+  - business_logic_auditor
+  - output_artifacts_auditor
+- agent_name: warehouse_metadata_extractor
+  lifecycle_phase: data_foundation_and_contracts
+  role_type: primary
+  status: active
+  prompt_path: agents/data_foundation_and_contracts/primary/warehouse_metadata_extractor.md
+  upstream_dependencies:
+  - multi_agent_orchestrator
+  downstream_dependencies:
+  - data_source_contract_auditor
+  - schema_mapping
+- agent_name: data_source_contract_auditor
+  lifecycle_phase: data_foundation_and_contracts
+  role_type: primary
+  status: active
+  prompt_path: agents/data_foundation_and_contracts/primary/data_source_contract_auditor.md
+  upstream_dependencies:
+  - warehouse_metadata_extractor
+  downstream_dependencies:
+  - schema_mapping
+  - sql_generator
+  - contract_compiler_validator
+  - label_target_definition_agent
+- agent_name: schema_mapping
+  lifecycle_phase: data_foundation_and_contracts
+  role_type: primary
+  status: active
+  prompt_path: agents/data_foundation_and_contracts/primary/schema_mapping.md
+  upstream_dependencies:
+  - warehouse_metadata_extractor
+  - data_source_contract_auditor
+  downstream_dependencies:
+  - sql_generator
+  - join_integrity
+  - feature_engineering_auditor
+  - contract_compiler_validator
+- agent_name: sql_generator
+  lifecycle_phase: data_foundation_and_contracts
+  role_type: primary
+  status: active
+  prompt_path: agents/data_foundation_and_contracts/primary/sql_generator.md
+  upstream_dependencies:
+  - data_source_contract_auditor
+  - schema_mapping
+  downstream_dependencies:
+  - join_integrity
+  - sql_partition_pruning
+- agent_name: join_integrity
+  lifecycle_phase: data_foundation_and_contracts
+  role_type: specialist
+  status: active
+  prompt_path: agents/data_foundation_and_contracts/specialist/join_integrity.md
+  upstream_dependencies:
+  - schema_mapping
+  - sql_generator
+  downstream_dependencies:
+  - feature_engineering_auditor
+  - label_target_definition_agent
+- agent_name: sql_partition_pruning
+  lifecycle_phase: data_foundation_and_contracts
+  role_type: specialist
+  status: active
+  prompt_path: agents/data_foundation_and_contracts/specialist/sql_partition_pruning.md
+  upstream_dependencies:
+  - sql_generator
+  downstream_dependencies:
+  - deployment_and_orchestration_auditor
+  - production_readiness_auditor
+- agent_name: contract_compiler_validator
+  lifecycle_phase: data_foundation_and_contracts
+  role_type: child
+  status: active
+  prompt_path: agents/data_foundation_and_contracts/primary/contract_compiler_validator.md
+  upstream_dependencies:
+  - data_source_contract_auditor
+  - schema_mapping
+  downstream_dependencies:
+  - integration_consistency
+  - preflight_execution_guard
+- agent_name: label_target_definition_agent
+  lifecycle_phase: dataset_feature_target_integrity
+  role_type: primary
+  status: active
+  prompt_path: agents/dataset_feature_target_integrity/primary/label_target_definition_agent.md
+  upstream_dependencies:
+  - data_source_contract_auditor
+  - join_integrity
+  - cohort_logic_auditor
+  downstream_dependencies:
+  - label_quality_and_ground_truth_auditor
+  - temporal_leakage_auditor
+  - model_evaluation_threshold_auditor
+  - model_monitoring_auditor
+- agent_name: label_quality_and_ground_truth_auditor
+  lifecycle_phase: dataset_feature_target_integrity
+  role_type: primary
+  status: active
+  prompt_path: agents/dataset_feature_target_integrity/primary/label_quality_and_ground_truth_auditor.md
+  upstream_dependencies:
+  - label_target_definition_agent
+  downstream_dependencies:
+  - training_pipeline_auditor
+  - model_monitoring_auditor
+- agent_name: feature_engineering_auditor
+  lifecycle_phase: dataset_feature_target_integrity
+  role_type: primary
+  status: active
+  prompt_path: agents/dataset_feature_target_integrity/primary/feature_engineering_auditor.md
+  upstream_dependencies:
+  - schema_mapping
+  - join_integrity
+  downstream_dependencies:
+  - feature_availability_at_time_auditor
+  - feature_engineering_relevance_auditor
+  - training_pipeline_auditor
+  - inference_pipeline_auditor
+- agent_name: temporal_leakage_auditor
+  lifecycle_phase: dataset_feature_target_integrity
+  role_type: specialist
+  status: active
+  prompt_path: agents/dataset_feature_target_integrity/specialist/temporal_leakage_auditor.md
+  upstream_dependencies:
+  - label_target_definition_agent
+  - feature_engineering_auditor
+  downstream_dependencies:
+  - training_pipeline_auditor
+  - model_evaluation_threshold_auditor
+- agent_name: feature_availability_at_time_auditor
+  lifecycle_phase: dataset_feature_target_integrity
+  role_type: specialist
+  status: active
+  prompt_path: agents/dataset_feature_target_integrity/specialist/feature_availability_at_time_auditor.md
+  upstream_dependencies:
+  - feature_engineering_auditor
+  downstream_dependencies:
+  - inference_pipeline_auditor
+  - offline_to_online_consistency_auditor
+- agent_name: feature_engineering_relevance_auditor
+  lifecycle_phase: dataset_feature_target_integrity
+  role_type: specialist
+  status: active
+  prompt_path: agents/dataset_feature_target_integrity/specialist/feature_engineering_relevance_auditor.md
+  upstream_dependencies:
+  - feature_engineering_auditor
+  downstream_dependencies:
+  - training_pipeline_auditor
+  - business_insight_quality_auditor
+- agent_name: business_logic_auditor
+  lifecycle_phase: dataset_feature_target_integrity
+  role_type: specialist
+  status: active
+  prompt_path: agents/dataset_feature_target_integrity/specialist/business_logic_auditor.md
+  upstream_dependencies:
+  - segment_naming_stability_auditor
+  - inference_pipeline_auditor
+  downstream_dependencies:
+  - output_artifacts_auditor
+  - end_to_end_ml_auditor
+- agent_name: training_pipeline_auditor
+  lifecycle_phase: training_evaluation_and_registry
+  role_type: primary
+  status: active
+  prompt_path: agents/training_evaluation_and_registry/primary/training_pipeline_auditor.md
+  upstream_dependencies:
+  - label_quality_and_ground_truth_auditor
+  - feature_engineering_auditor
+  - temporal_leakage_auditor
+  - dependency_package_auditor
+  downstream_dependencies:
+  - model_evaluation_threshold_auditor
+  - model_comparison_auditor
+  - mlflow_registry_auditor
+- agent_name: model_evaluation_threshold_auditor
+  lifecycle_phase: training_evaluation_and_registry
+  role_type: primary
+  status: active
+  prompt_path: agents/training_evaluation_and_registry/primary/model_evaluation_threshold_auditor.md
+  upstream_dependencies:
+  - training_pipeline_auditor
+  - label_target_definition_agent
+  downstream_dependencies:
+  - model_comparison_auditor
+  - promotion_release_gate_agent
+  - model_monitoring_auditor
+- agent_name: mlflow_registry_auditor
+  lifecycle_phase: training_evaluation_and_registry
+  role_type: primary
+  status: active
+  prompt_path: agents/training_evaluation_and_registry/primary/mlflow_registry_auditor.md
+  upstream_dependencies:
+  - training_pipeline_auditor
+  - model_evaluation_threshold_auditor
+  downstream_dependencies:
+  - inference_pipeline_auditor
+  - promotion_release_gate_agent
+  - incident_rollback_readiness_agent
+- agent_name: model_comparison_auditor
+  lifecycle_phase: training_evaluation_and_registry
+  role_type: specialist
+  status: active
+  prompt_path: agents/training_evaluation_and_registry/specialist/model_comparison_auditor.md
+  upstream_dependencies:
+  - model_evaluation_threshold_auditor
+  downstream_dependencies:
+  - promotion_release_gate_agent
+- agent_name: memory_and_performance_auditor
+  lifecycle_phase: training_evaluation_and_registry
+  role_type: specialist
+  status: active
+  prompt_path: agents/training_evaluation_and_registry/specialist/memory_and_performance_auditor.md
+  upstream_dependencies:
+  - training_pipeline_auditor
+  downstream_dependencies:
+  - inference_pipeline_auditor
+  - production_readiness_auditor
+- agent_name: inference_pipeline_auditor
+  lifecycle_phase: inference_outputs_and_decisioning
+  role_type: primary
+  status: active
+  prompt_path: agents/inference_outputs_and_decisioning/primary/inference_pipeline_auditor.md
+  upstream_dependencies:
+  - feature_engineering_auditor
+  - mlflow_registry_auditor
+  downstream_dependencies:
+  - offline_to_online_consistency_auditor
+  - output_artifacts_auditor
+  - business_logic_auditor
+  - model_monitoring_auditor
+- agent_name: offline_to_online_consistency_auditor
+  lifecycle_phase: inference_outputs_and_decisioning
+  role_type: primary
+  status: active
+  prompt_path: agents/inference_outputs_and_decisioning/primary/offline_to_online_consistency_auditor.md
+  upstream_dependencies:
+  - inference_pipeline_auditor
+  - feature_availability_at_time_auditor
+  downstream_dependencies:
+  - model_monitoring_auditor
+  - integration_consistency
+- agent_name: output_artifacts_auditor
+  lifecycle_phase: inference_outputs_and_decisioning
+  role_type: primary
+  status: active
+  prompt_path: agents/inference_outputs_and_decisioning/primary/output_artifacts_auditor.md
+  upstream_dependencies:
+  - inference_pipeline_auditor
+  downstream_dependencies:
+  - integration_consistency
+  - production_readiness_auditor
+- agent_name: promotion_release_gate_agent
+  lifecycle_phase: inference_outputs_and_decisioning
+  role_type: child
+  status: active
+  prompt_path: agents/inference_outputs_and_decisioning/primary/promotion_release_gate_agent.md
+  upstream_dependencies:
+  - model_evaluation_threshold_auditor
+  - model_comparison_auditor
+  - mlflow_registry_auditor
+  downstream_dependencies:
+  - production_readiness_auditor
+  - incident_rollback_readiness_agent
+- agent_name: model_monitoring_auditor
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: primary
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/primary/model_monitoring_auditor.md
+  upstream_dependencies:
+  - inference_pipeline_auditor
+  - label_target_definition_agent
+  - model_evaluation_threshold_auditor
+  downstream_dependencies:
+  - data_drift_auditor
+  - end_to_end_ml_auditor
+- agent_name: data_drift_auditor
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: primary
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/primary/data_drift_auditor.md
+  upstream_dependencies:
+  - model_monitoring_auditor
+  downstream_dependencies:
+  - production_readiness_auditor
+  - end_to_end_ml_auditor
+- agent_name: testing_and_validation_auditor
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: primary
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/primary/testing_and_validation_auditor.md
+  upstream_dependencies:
+  - task_triage_router
+  downstream_dependencies:
+  - preflight_execution_guard
+  - integration_consistency
+  - production_readiness_auditor
+- agent_name: pipeline_idempotency_auditor
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: specialist
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/specialist/pipeline_idempotency_auditor.md
+  upstream_dependencies:
+  - deployment_and_orchestration_auditor
+  - testing_and_validation_auditor
+  downstream_dependencies:
+  - production_readiness_auditor
+  - incident_rollback_readiness_agent
+- agent_name: silent_fallback_auditor
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: specialist
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/specialist/silent_fallback_auditor.md
+  upstream_dependencies:
+  - testing_and_validation_auditor
+  downstream_dependencies:
+  - production_readiness_auditor
+  - end_to_end_ml_auditor
+- agent_name: config_governance_auditor
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: specialist
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/specialist/config_governance_auditor.md
+  upstream_dependencies:
+  - environment_and_runtime_auditor
+  downstream_dependencies:
+  - preflight_execution_guard
+  - integration_consistency
+- agent_name: deployment_and_orchestration_auditor
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: specialist
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/specialist/deployment_and_orchestration_auditor.md
+  upstream_dependencies:
+  - multi_agent_orchestrator
+  - sql_partition_pruning
+  downstream_dependencies:
+  - pipeline_idempotency_auditor
+  - preflight_execution_guard
+  - integration_consistency
+- agent_name: preflight_execution_guard
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: child
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/primary/preflight_execution_guard.md
+  upstream_dependencies:
+  - environment_and_runtime_auditor
+  - config_governance_auditor
+  - contract_compiler_validator
+  downstream_dependencies:
+  - training_pipeline_auditor
+  - inference_pipeline_auditor
+  - model_monitoring_auditor
+- agent_name: incident_rollback_readiness_agent
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: child
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/primary/incident_rollback_readiness_agent.md
+  upstream_dependencies:
+  - mlflow_registry_auditor
+  - pipeline_idempotency_auditor
+  - promotion_release_gate_agent
+  downstream_dependencies:
+  - production_readiness_auditor
+  - end_to_end_ml_auditor
+- agent_name: unit_test_coverage_auditor
+  lifecycle_phase: monitoring_operational_resilience
+  role_type: specialist
+  status: active
+  prompt_path: agents/monitoring_operational_resilience/specialist/unit_test_coverage_auditor.md
+  upstream_dependencies:
+  - testing_and_validation_auditor
+  downstream_dependencies:
+  - acceptance_criteria_verifier
+- agent_name: integration_consistency
+  lifecycle_phase: final_integration_and_release_gates
+  role_type: primary
+  status: active
+  prompt_path: agents/final_integration_and_release_gates/primary/integration_consistency.md
+  upstream_dependencies:
+  - contract_compiler_validator
+  - output_artifacts_auditor
+  - offline_to_online_consistency_auditor
+  - deployment_and_orchestration_auditor
+  downstream_dependencies:
+  - production_readiness_auditor
+- agent_name: production_readiness_auditor
+  lifecycle_phase: final_integration_and_release_gates
+  role_type: primary
+  status: active
+  prompt_path: agents/final_integration_and_release_gates/primary/production_readiness_auditor.md
+  upstream_dependencies:
+  - integration_consistency
+  - preflight_execution_guard
+  - incident_rollback_readiness_agent
+  downstream_dependencies:
+  - end_to_end_ml_auditor
+- agent_name: end_to_end_ml_auditor
+  lifecycle_phase: final_integration_and_release_gates
+  role_type: primary
+  status: active
+  prompt_path: agents/final_integration_and_release_gates/primary/end_to_end_ml_auditor.md
+  upstream_dependencies:
+  - production_readiness_auditor
+  - model_monitoring_auditor
+  - business_logic_auditor
+  downstream_dependencies:
+  - acceptance_criteria_verifier
+- agent_name: acceptance_criteria_verifier
+  lifecycle_phase: final_integration_and_release_gates
+  role_type: primary
+  status: active
+  prompt_path: agents/final_integration_and_release_gates/primary/acceptance_criteria_verifier.md
+  upstream_dependencies:
+  - end_to_end_ml_auditor
+  - documentation_runbook_auditor
+  downstream_dependencies: []
