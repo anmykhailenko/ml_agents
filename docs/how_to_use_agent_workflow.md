@@ -11,6 +11,10 @@ It is designed to help you:
 - avoid skipping critical ML checks such as target definition, leakage review, and data contracts
 - scale from lightweight prototype review to full production release gating
 
+Before choosing individual agents, choose an execution mode.
+Execution modes are defined in [agent_framework/execution_modes.md](/Users/anastasiia.m/Documents/My%20projects/Agents/agent_framework/execution_modes.md).
+They turn the framework into a modular rigor-escalation operating system instead of a flat agent catalog.
+
 The lifecycle is intentionally chronological:
 1. `01_intake_and_scope`
 2. `02_repository_runtime_foundation`
@@ -32,6 +36,14 @@ Use this framework when:
 - you need targeted audits before training, inference, or release
 - you want structured written outputs under `reports/agent_reviews/`
 - you are preparing an MVP, prototype, production release, or take-home assignment
+
+## Default Way To Start
+
+Use this order:
+1. choose the execution mode that matches the real project
+2. run that mode's required agents
+3. add optional agents only when a concrete risk or downstream dependency appears
+4. stop at the mode's recommended stopping point unless the project scope expands
 
 ## When Not To Use All Agents
 

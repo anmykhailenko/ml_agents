@@ -49,6 +49,7 @@ Each gate has a narrower closure role than the next:
 ## Framework Artifacts
 
 - [lifecycle_groups.md](/Users/anastasiia.m/Documents/My%20projects/Agents/agent_framework/lifecycle_groups.md)
+- [execution_modes.md](/Users/anastasiia.m/Documents/My%20projects/Agents/agent_framework/execution_modes.md)
 - [orchestration_graph.md](/Users/anastasiia.m/Documents/My%20projects/Agents/agent_framework/orchestration_graph.md)
 - [shared_prompt_template.md](/Users/anastasiia.m/Documents/My%20projects/Agents/agent_framework/shared_prompt_template.md)
 - [shared_contract_envelope.yaml](/Users/anastasiia.m/Documents/My%20projects/Agents/agent_framework/shared_contract_envelope.yaml)
@@ -81,3 +82,4 @@ Each gate has a narrower closure role than the next:
 - Make parent vs specialist relationships explicit instead of flattening all prompts into peer defaults.
 - Treat contracts, validation, and handoff artifacts as first-class orchestration dependencies.
 - Preserve edge-case handling around temporal safety, grain, monitoring maturity, rerun safety, and release gating.
+- Use execution modes to escalate rigor modularly instead of treating the framework as one fixed full-stack workflow.
