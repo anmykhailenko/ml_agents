@@ -11,23 +11,22 @@ strict_final_gate_order:
 - acceptance_criteria_verifier
 agents:
 - agent_name: task_triage_router
-  lifecycle_phase: intake_and_scope
+  lifecycle_phase: 01_intake_and_scope
   role: Triage, scope routing, hidden dependency detection, and ownership setup.
-  when_to_use: At the start of a new request or project to classify the work and define
-    minimal correct scope.
+  when_to_use: At the start of a new request or project to classify the work and define minimal correct scope.
   upstream_prerequisites: []
   downstream_handoff:
   - multi_agent_orchestrator
   - overengineering_control
   role_type: primary
   status: active
-  prompt_path: agents/intake_and_scope/primary/task_triage_router.md
+  prompt_path: agents/01_intake_and_scope/primary/task_triage_router.md
+  phase_order: 1
+  agent_order: 10
 - agent_name: multi_agent_orchestrator
-  lifecycle_phase: intake_and_scope
-  role: Global orchestration, dependency sequencing, and conflict resolution across
-    specialists.
-  when_to_use: When the task is multi-stage, cross-functional, or production-critical
-    and needs coordinated execution order.
+  lifecycle_phase: 01_intake_and_scope
+  role: Global orchestration, dependency sequencing, and conflict resolution across specialists.
+  when_to_use: When the task is multi-stage, cross-functional, or production-critical and needs coordinated execution order.
   upstream_prerequisites:
   - task_triage_router
   downstream_handoff:
@@ -37,12 +36,13 @@ agents:
   - integration_consistency
   role_type: primary
   status: active
-  prompt_path: agents/intake_and_scope/primary/multi_agent_orchestrator.md
+  prompt_path: agents/01_intake_and_scope/primary/multi_agent_orchestrator.md
+  phase_order: 1
+  agent_order: 20
 - agent_name: overengineering_control
-  lifecycle_phase: intake_and_scope
+  lifecycle_phase: 01_intake_and_scope
   role: Scope proportionality and unnecessary complexity detection.
-  when_to_use: When architecture or process may exceed business need, assignment scope,
-    or project maturity.
+  when_to_use: When architecture or process may exceed business need, assignment scope, or project maturity.
   upstream_prerequisites:
   - task_triage_router
   downstream_handoff:
@@ -50,12 +50,13 @@ agents:
   - ml_repository_architect
   role_type: specialist
   status: experimental
-  prompt_path: agents/intake_and_scope/specialist/overengineering_control.md
+  prompt_path: agents/01_intake_and_scope/specialist/overengineering_control.md
+  phase_order: 1
+  agent_order: 30
 - agent_name: ml_repository_architect
-  lifecycle_phase: repository_runtime_foundation
+  lifecycle_phase: 02_repository_runtime_foundation
   role: Repository boundary, module layout, and production-safe architecture audit.
-  when_to_use: When repository structure, separation of concerns, or cleanup boundaries
-    need to be made explicit.
+  when_to_use: When repository structure, separation of concerns, or cleanup boundaries need to be made explicit.
   upstream_prerequisites:
   - multi_agent_orchestrator
   downstream_handoff:
@@ -63,12 +64,13 @@ agents:
   - documentation_runbook_auditor
   role_type: primary
   status: active
-  prompt_path: agents/repository_runtime_foundation/primary/ml_repository_architect.md
+  prompt_path: agents/02_repository_runtime_foundation/primary/ml_repository_architect.md
+  phase_order: 2
+  agent_order: 10
 - agent_name: environment_and_runtime_auditor
-  lifecycle_phase: repository_runtime_foundation
+  lifecycle_phase: 02_repository_runtime_foundation
   role: Runtime environment, path, env-var, and execution-context audit.
-  when_to_use: Before reliable execution or when local/cloud/runtime assumptions may
-    break reproducibility.
+  when_to_use: Before reliable execution or when local/cloud/runtime assumptions may break reproducibility.
   upstream_prerequisites:
   - ml_repository_architect
   downstream_handoff:
@@ -76,12 +78,13 @@ agents:
   - production_readiness_auditor
   role_type: primary
   status: active
-  prompt_path: agents/repository_runtime_foundation/primary/environment_and_runtime_auditor.md
+  prompt_path: agents/02_repository_runtime_foundation/primary/environment_and_runtime_auditor.md
+  phase_order: 2
+  agent_order: 20
 - agent_name: dependency_package_auditor
-  lifecycle_phase: repository_runtime_foundation
+  lifecycle_phase: 02_repository_runtime_foundation
   role: Dependency reproducibility, version compatibility, and package hygiene audit.
-  when_to_use: When package drift, runtime incompatibility, or hidden notebook dependencies
-    are risks.
+  when_to_use: When package drift, runtime incompatibility, or hidden notebook dependencies are risks.
   upstream_prerequisites:
   - ml_repository_architect
   downstream_handoff:
@@ -89,12 +92,13 @@ agents:
   - production_readiness_auditor
   role_type: primary
   status: active
-  prompt_path: agents/repository_runtime_foundation/primary/dependency_package_auditor.md
+  prompt_path: agents/02_repository_runtime_foundation/primary/dependency_package_auditor.md
+  phase_order: 2
+  agent_order: 30
 - agent_name: security_auditor
-  lifecycle_phase: repository_runtime_foundation
+  lifecycle_phase: 02_repository_runtime_foundation
   role: Secrets handling and operational security hygiene audit.
-  when_to_use: When credentials, access patterns, or artifact exposure need production
-    review.
+  when_to_use: When credentials, access patterns, or artifact exposure need production review.
   upstream_prerequisites:
   - environment_and_runtime_auditor
   downstream_handoff:
@@ -102,12 +106,13 @@ agents:
   - documentation_runbook_auditor
   role_type: specialist
   status: active
-  prompt_path: agents/repository_runtime_foundation/specialist/security_auditor.md
+  prompt_path: agents/02_repository_runtime_foundation/specialist/security_auditor.md
+  phase_order: 2
+  agent_order: 40
 - agent_name: git_hygiene_auditor
-  lifecycle_phase: repository_runtime_foundation
+  lifecycle_phase: 02_repository_runtime_foundation
   role: Repository hygiene, generated artifact control, and unsafe tracked-file detection.
-  when_to_use: When a repo may contain accidental artifacts, local-only files, or
-    workflow clutter.
+  when_to_use: When a repo may contain accidental artifacts, local-only files, or workflow clutter.
   upstream_prerequisites:
   - ml_repository_architect
   downstream_handoff:
@@ -115,12 +120,13 @@ agents:
   - production_readiness_auditor
   role_type: specialist
   status: active
-  prompt_path: agents/repository_runtime_foundation/specialist/git_hygiene_auditor.md
+  prompt_path: agents/02_repository_runtime_foundation/specialist/git_hygiene_auditor.md
+  phase_order: 2
+  agent_order: 50
 - agent_name: documentation_runbook_auditor
-  lifecycle_phase: repository_runtime_foundation
+  lifecycle_phase: 02_repository_runtime_foundation
   role: Onboarding, runbook, and operational-documentation audit.
-  when_to_use: Before handover or when commands, troubleshooting, and recovery documentation
-    must be production-usable.
+  when_to_use: Before handover or when commands, troubleshooting, and recovery documentation must be production-usable.
   upstream_prerequisites:
   - ml_repository_architect
   - environment_and_runtime_auditor
@@ -129,24 +135,26 @@ agents:
   - acceptance_criteria_verifier
   role_type: specialist
   status: active
-  prompt_path: agents/repository_runtime_foundation/specialist/documentation_runbook_auditor.md
+  prompt_path: agents/02_repository_runtime_foundation/specialist/documentation_runbook_auditor.md
+  phase_order: 2
+  agent_order: 60
 - agent_name: code_patch_reviewer
-  lifecycle_phase: repository_runtime_foundation
+  lifecycle_phase: 02_repository_runtime_foundation
   role: Patch-scoped correctness, regression, and contract-alignment review.
-  when_to_use: For targeted code-change review without broad redesign or unrelated
-    audits.
+  when_to_use: For targeted code-change review without broad redesign or unrelated audits.
   upstream_prerequisites:
   - git_hygiene_auditor
   downstream_handoff:
   - acceptance_criteria_verifier
   role_type: specialist
   status: experimental
-  prompt_path: agents/repository_runtime_foundation/specialist/code_patch_reviewer.md
+  prompt_path: agents/02_repository_runtime_foundation/specialist/code_patch_reviewer.md
+  phase_order: 2
+  agent_order: 70
 - agent_name: eda_auditor
-  lifecycle_phase: exploratory_analysis_and_metric_definition
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
   role: EDA depth, clarity, and analytical usefulness audit.
-  when_to_use: When exploratory analysis is a meaningful input to feature design,
-    reporting, or KPI framing.
+  when_to_use: When exploratory analysis is a meaningful input to feature design, reporting, or KPI framing.
   upstream_prerequisites:
   - task_triage_router
   downstream_handoff:
@@ -154,12 +162,13 @@ agents:
   - business_insight_quality_auditor
   role_type: primary
   status: active
-  prompt_path: agents/exploratory_analysis_and_metric_definition/primary/eda_auditor.md
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/primary/eda_auditor.md
+  phase_order: 3
+  agent_order: 10
 - agent_name: analytical_metrics_auditor
-  lifecycle_phase: exploratory_analysis_and_metric_definition
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
   role: Canonical metric and KPI correctness audit.
-  when_to_use: When metric formulas, denominators, windows, or aggregation logic drive
-    downstream decisions.
+  when_to_use: When metric formulas, denominators, windows, or aggregation logic drive downstream decisions.
   upstream_prerequisites:
   - eda_auditor
   downstream_handoff:
@@ -167,12 +176,13 @@ agents:
   - model_monitoring_auditor
   role_type: primary
   status: active
-  prompt_path: agents/exploratory_analysis_and_metric_definition/primary/analytical_metrics_auditor.md
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/primary/analytical_metrics_auditor.md
+  phase_order: 3
+  agent_order: 20
 - agent_name: business_insight_quality_auditor
-  lifecycle_phase: exploratory_analysis_and_metric_definition
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
   role: Business-value and decision-utility audit for generated insights.
-  when_to_use: When reports or analyses claim actionable business findings that need
-    rigor review.
+  when_to_use: When reports or analyses claim actionable business findings that need rigor review.
   upstream_prerequisites:
   - eda_auditor
   - analytical_metrics_auditor
@@ -180,24 +190,26 @@ agents:
   - acceptance_criteria_verifier
   role_type: primary
   status: active
-  prompt_path: agents/exploratory_analysis_and_metric_definition/primary/business_insight_quality_auditor.md
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/primary/business_insight_quality_auditor.md
+  phase_order: 3
+  agent_order: 30
 - agent_name: wau_mau_dau_consistency_auditor
-  lifecycle_phase: exploratory_analysis_and_metric_definition
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
   role: Active-user metric specialist under the broader metrics domain.
-  when_to_use: When DAU, WAU, MAU, stickiness, and active-event logic are core business
-    KPIs.
+  when_to_use: When DAU, WAU, MAU, stickiness, and active-event logic are core business KPIs.
   upstream_prerequisites:
   - analytical_metrics_auditor
   downstream_handoff:
   - model_monitoring_auditor
   role_type: specialist
   status: experimental
-  prompt_path: agents/exploratory_analysis_and_metric_definition/specialist/wau_mau_dau_consistency_auditor.md
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/wau_mau_dau_consistency_auditor.md
+  phase_order: 3
+  agent_order: 40
 - agent_name: cohort_logic_auditor
-  lifecycle_phase: exploratory_analysis_and_metric_definition
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
   role: Cohort, retention, and churn logic specialist.
-  when_to_use: When longitudinal user behavior, retention, or churn windows matter
-    to analysis or modeling.
+  when_to_use: When longitudinal user behavior, retention, or churn windows matter to analysis or modeling.
   upstream_prerequisites:
   - analytical_metrics_auditor
   downstream_handoff:
@@ -205,12 +217,13 @@ agents:
   - model_monitoring_auditor
   role_type: specialist
   status: experimental
-  prompt_path: agents/exploratory_analysis_and_metric_definition/specialist/cohort_logic_auditor.md
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/cohort_logic_auditor.md
+  phase_order: 3
+  agent_order: 50
 - agent_name: segment_naming_stability_auditor
-  lifecycle_phase: exploratory_analysis_and_metric_definition
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
   role: Segment and category naming consistency audit.
-  when_to_use: When segment labels or buckets are consumed across reports, models,
-    and downstream systems.
+  when_to_use: When segment labels or buckets are consumed across reports, models, and downstream systems.
   upstream_prerequisites:
   - analytical_metrics_auditor
   downstream_handoff:
@@ -218,9 +231,11 @@ agents:
   - output_artifacts_auditor
   role_type: specialist
   status: experimental
-  prompt_path: agents/exploratory_analysis_and_metric_definition/specialist/segment_naming_stability_auditor.md
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/segment_naming_stability_auditor.md
+  phase_order: 3
+  agent_order: 60
 - agent_name: warehouse_metadata_extractor
-  lifecycle_phase: data_foundation_and_contracts
+  lifecycle_phase: 04_data_foundation_and_contracts
   role: Metadata discovery, profiling, key inference, and source inventory.
   when_to_use: Before schema mapping, SQL generation, or dataset contract formalization.
   upstream_prerequisites:
@@ -230,12 +245,13 @@ agents:
   - schema_mapping
   role_type: primary
   status: active
-  prompt_path: agents/data_foundation_and_contracts/primary/warehouse_metadata_extractor.md
+  prompt_path: agents/04_data_foundation_and_contracts/primary/warehouse_metadata_extractor.md
+  phase_order: 4
+  agent_order: 10
 - agent_name: data_source_contract_auditor
-  lifecycle_phase: data_foundation_and_contracts
+  lifecycle_phase: 04_data_foundation_and_contracts
   role: Source inventory and dataset contract formalization.
-  when_to_use: When production datasets need explicit grain, schema, freshness, and
-    output metadata policy.
+  when_to_use: When production datasets need explicit grain, schema, freshness, and output metadata policy.
   upstream_prerequisites:
   - warehouse_metadata_extractor
   downstream_handoff:
@@ -245,12 +261,13 @@ agents:
   - label_target_definition_agent
   role_type: primary
   status: active
-  prompt_path: agents/data_foundation_and_contracts/primary/data_source_contract_auditor.md
+  prompt_path: agents/04_data_foundation_and_contracts/primary/data_source_contract_auditor.md
+  phase_order: 4
+  agent_order: 20
 - agent_name: schema_mapping
-  lifecycle_phase: data_foundation_and_contracts
+  lifecycle_phase: 04_data_foundation_and_contracts
   role: Source-to-target schema lineage, compatibility, and grain mapping.
-  when_to_use: Before SQL generation, joins, or downstream training/inference schema
-    validation.
+  when_to_use: Before SQL generation, joins, or downstream training/inference schema validation.
   upstream_prerequisites:
   - warehouse_metadata_extractor
   - data_source_contract_auditor
@@ -261,12 +278,13 @@ agents:
   - contract_compiler_validator
   role_type: primary
   status: active
-  prompt_path: agents/data_foundation_and_contracts/primary/schema_mapping.md
+  prompt_path: agents/04_data_foundation_and_contracts/primary/schema_mapping.md
+  phase_order: 4
+  agent_order: 30
 - agent_name: sql_generator
-  lifecycle_phase: data_foundation_and_contracts
+  lifecycle_phase: 04_data_foundation_and_contracts
   role: Production-safe SQL generation using contracts and mappings.
-  when_to_use: When dataset or output SQL must be generated with explicit grain, partition,
-    and leakage safety.
+  when_to_use: When dataset or output SQL must be generated with explicit grain, partition, and leakage safety.
   upstream_prerequisites:
   - data_source_contract_auditor
   - schema_mapping
@@ -275,12 +293,13 @@ agents:
   - sql_partition_pruning
   role_type: primary
   status: active
-  prompt_path: agents/data_foundation_and_contracts/primary/sql_generator.md
+  prompt_path: agents/04_data_foundation_and_contracts/primary/sql_generator.md
+  phase_order: 4
+  agent_order: 40
 - agent_name: join_integrity
-  lifecycle_phase: data_foundation_and_contracts
+  lifecycle_phase: 04_data_foundation_and_contracts
   role: Join-grain preservation and row-multiplication specialist.
-  when_to_use: When SQL or merge logic combines sources and may create duplicate or
-    dropped rows.
+  when_to_use: When SQL or merge logic combines sources and may create duplicate or dropped rows.
   upstream_prerequisites:
   - schema_mapping
   - sql_generator
@@ -289,12 +308,13 @@ agents:
   - label_target_definition_agent
   role_type: specialist
   status: active
-  prompt_path: agents/data_foundation_and_contracts/specialist/join_integrity.md
+  prompt_path: agents/04_data_foundation_and_contracts/specialist/join_integrity.md
+  phase_order: 4
+  agent_order: 50
 - agent_name: sql_partition_pruning
-  lifecycle_phase: data_foundation_and_contracts
+  lifecycle_phase: 04_data_foundation_and_contracts
   role: Query-cost, partition-pruning, and bounded-execution specialist.
-  when_to_use: When warehouse safety, cost, or unbounded scans are a material operational
-    risk.
+  when_to_use: When warehouse safety, cost, or unbounded scans are a material operational risk.
   upstream_prerequisites:
   - sql_generator
   downstream_handoff:
@@ -302,12 +322,13 @@ agents:
   - production_readiness_auditor
   role_type: specialist
   status: active
-  prompt_path: agents/data_foundation_and_contracts/specialist/sql_partition_pruning.md
+  prompt_path: agents/04_data_foundation_and_contracts/specialist/sql_partition_pruning.md
+  phase_order: 4
+  agent_order: 60
 - agent_name: contract_compiler_validator
-  lifecycle_phase: data_foundation_and_contracts
+  lifecycle_phase: 04_data_foundation_and_contracts
   role: Shared contract-envelope validation and cross-contract dependency compilation.
-  when_to_use: After multiple agents have created contracts and before downstream
-    automation depends on them.
+  when_to_use: After multiple agents have created contracts and before downstream automation depends on them.
   upstream_prerequisites:
   - data_source_contract_auditor
   - schema_mapping
@@ -316,12 +337,13 @@ agents:
   - preflight_execution_guard
   role_type: child
   status: active
-  prompt_path: agents/data_foundation_and_contracts/primary/contract_compiler_validator.md
+  prompt_path: agents/04_data_foundation_and_contracts/primary/contract_compiler_validator.md
+  phase_order: 4
+  agent_order: 70
 - agent_name: label_target_definition_agent
-  lifecycle_phase: dataset_feature_target_integrity
+  lifecycle_phase: 05_dataset_feature_target_integrity
   role: Canonical target and label policy definition.
-  when_to_use: Before label auditing, evaluation, monitoring, or any model training
-    that depends on target semantics.
+  when_to_use: Before label auditing, evaluation, monitoring, or any model training that depends on target semantics.
   upstream_prerequisites:
   - data_source_contract_auditor
   - join_integrity
@@ -333,12 +355,13 @@ agents:
   - model_monitoring_auditor
   role_type: primary
   status: active
-  prompt_path: agents/dataset_feature_target_integrity/primary/label_target_definition_agent.md
+  prompt_path: agents/05_dataset_feature_target_integrity/primary/label_target_definition_agent.md
+  phase_order: 5
+  agent_order: 10
 - agent_name: label_quality_and_ground_truth_auditor
-  lifecycle_phase: dataset_feature_target_integrity
+  lifecycle_phase: 05_dataset_feature_target_integrity
   role: Label correctness, maturity, and supervision-quality audit.
-  when_to_use: When training labels, delayed outcomes, or noisy supervision need production
-    validation.
+  when_to_use: When training labels, delayed outcomes, or noisy supervision need production validation.
   upstream_prerequisites:
   - label_target_definition_agent
   downstream_handoff:
@@ -346,12 +369,13 @@ agents:
   - model_monitoring_auditor
   role_type: primary
   status: active
-  prompt_path: agents/dataset_feature_target_integrity/primary/label_quality_and_ground_truth_auditor.md
+  prompt_path: agents/05_dataset_feature_target_integrity/primary/label_quality_and_ground_truth_auditor.md
+  phase_order: 5
+  agent_order: 20
 - agent_name: feature_engineering_auditor
-  lifecycle_phase: dataset_feature_target_integrity
+  lifecycle_phase: 05_dataset_feature_target_integrity
   role: Feature correctness, governance, and reproducibility audit.
-  when_to_use: When feature definitions, manifests, parity, or governance need a primary
-    review.
+  when_to_use: When feature definitions, manifests, parity, or governance need a primary review.
   upstream_prerequisites:
   - schema_mapping
   - join_integrity
@@ -362,12 +386,13 @@ agents:
   - inference_pipeline_auditor
   role_type: primary
   status: active
-  prompt_path: agents/dataset_feature_target_integrity/primary/feature_engineering_auditor.md
+  prompt_path: agents/05_dataset_feature_target_integrity/primary/feature_engineering_auditor.md
+  phase_order: 5
+  agent_order: 30
 - agent_name: temporal_leakage_auditor
-  lifecycle_phase: dataset_feature_target_integrity
+  lifecycle_phase: 05_dataset_feature_target_integrity
   role: Temporal leakage and prediction-moment specialist.
-  when_to_use: When feature windows, target windows, or scoring timestamps could leak
-    future information.
+  when_to_use: When feature windows, target windows, or scoring timestamps could leak future information.
   upstream_prerequisites:
   - label_target_definition_agent
   - feature_engineering_auditor
@@ -376,12 +401,13 @@ agents:
   - model_evaluation_threshold_auditor
   role_type: specialist
   status: active
-  prompt_path: agents/dataset_feature_target_integrity/specialist/temporal_leakage_auditor.md
+  prompt_path: agents/05_dataset_feature_target_integrity/specialist/temporal_leakage_auditor.md
+  phase_order: 5
+  agent_order: 40
 - agent_name: feature_availability_at_time_auditor
-  lifecycle_phase: dataset_feature_target_integrity
+  lifecycle_phase: 05_dataset_feature_target_integrity
   role: Serving-time feature-availability specialist.
-  when_to_use: When inference-time feature presence or freshness may differ from offline
-    training assumptions.
+  when_to_use: When inference-time feature presence or freshness may differ from offline training assumptions.
   upstream_prerequisites:
   - feature_engineering_auditor
   downstream_handoff:
@@ -389,9 +415,11 @@ agents:
   - offline_to_online_consistency_auditor
   role_type: specialist
   status: active
-  prompt_path: agents/dataset_feature_target_integrity/specialist/feature_availability_at_time_auditor.md
+  prompt_path: agents/05_dataset_feature_target_integrity/specialist/feature_availability_at_time_auditor.md
+  phase_order: 5
+  agent_order: 50
 - agent_name: feature_engineering_relevance_auditor
-  lifecycle_phase: dataset_feature_target_integrity
+  lifecycle_phase: 05_dataset_feature_target_integrity
   role: Feature usefulness, redundancy, and business-hypothesis specialist.
   when_to_use: When feature design quality matters beyond parity and governance.
   upstream_prerequisites:
@@ -401,12 +429,13 @@ agents:
   - business_insight_quality_auditor
   role_type: specialist
   status: experimental
-  prompt_path: agents/dataset_feature_target_integrity/specialist/feature_engineering_relevance_auditor.md
+  prompt_path: agents/05_dataset_feature_target_integrity/specialist/feature_engineering_relevance_auditor.md
+  phase_order: 5
+  agent_order: 60
 - agent_name: business_logic_auditor
-  lifecycle_phase: dataset_feature_target_integrity
+  lifecycle_phase: 05_dataset_feature_target_integrity
   role: Business-facing score interpretation and decisioning audit.
-  when_to_use: When model outputs drive recommendations, thresholds, or downstream
-    actions.
+  when_to_use: When model outputs drive recommendations, thresholds, or downstream actions.
   upstream_prerequisites:
   - segment_naming_stability_auditor
   - inference_pipeline_auditor
@@ -415,9 +444,11 @@ agents:
   - end_to_end_ml_auditor
   role_type: specialist
   status: active
-  prompt_path: agents/dataset_feature_target_integrity/specialist/business_logic_auditor.md
+  prompt_path: agents/05_dataset_feature_target_integrity/specialist/business_logic_auditor.md
+  phase_order: 5
+  agent_order: 70
 - agent_name: training_pipeline_auditor
-  lifecycle_phase: training_evaluation_and_registry
+  lifecycle_phase: 06_training_evaluation_and_registry
   role: Training correctness, split governance, and reproducibility audit.
   when_to_use: Before trusting model metrics or promoting model artifacts.
   upstream_prerequisites:
@@ -431,12 +462,13 @@ agents:
   - mlflow_registry_auditor
   role_type: primary
   status: active
-  prompt_path: agents/training_evaluation_and_registry/primary/training_pipeline_auditor.md
+  prompt_path: agents/06_training_evaluation_and_registry/primary/training_pipeline_auditor.md
+  phase_order: 6
+  agent_order: 10
 - agent_name: model_evaluation_threshold_auditor
-  lifecycle_phase: training_evaluation_and_registry
+  lifecycle_phase: 06_training_evaluation_and_registry
   role: Metric validity, threshold governance, and calibration audit.
-  when_to_use: When selecting metrics, thresholds, or promotion criteria for a candidate
-    model.
+  when_to_use: When selecting metrics, thresholds, or promotion criteria for a candidate model.
   upstream_prerequisites:
   - training_pipeline_auditor
   - label_target_definition_agent
@@ -446,12 +478,13 @@ agents:
   - model_monitoring_auditor
   role_type: primary
   status: active
-  prompt_path: agents/training_evaluation_and_registry/primary/model_evaluation_threshold_auditor.md
+  prompt_path: agents/06_training_evaluation_and_registry/primary/model_evaluation_threshold_auditor.md
+  phase_order: 6
+  agent_order: 20
 - agent_name: mlflow_registry_auditor
-  lifecycle_phase: training_evaluation_and_registry
+  lifecycle_phase: 06_training_evaluation_and_registry
   role: Experiment tracking, model registry, alias, and promotion-safety audit.
-  when_to_use: When registry behavior, version traceability, or artifact completeness
-    matters to release.
+  when_to_use: When registry behavior, version traceability, or artifact completeness matters to release.
   upstream_prerequisites:
   - training_pipeline_auditor
   - model_evaluation_threshold_auditor
@@ -461,24 +494,26 @@ agents:
   - incident_rollback_readiness_agent
   role_type: primary
   status: active
-  prompt_path: agents/training_evaluation_and_registry/primary/mlflow_registry_auditor.md
+  prompt_path: agents/06_training_evaluation_and_registry/primary/mlflow_registry_auditor.md
+  phase_order: 6
+  agent_order: 30
 - agent_name: model_comparison_auditor
-  lifecycle_phase: training_evaluation_and_registry
+  lifecycle_phase: 06_training_evaluation_and_registry
   role: Fairness and validity specialist for candidate model comparisons.
-  when_to_use: When a champion/candidate decision depends on comparing multiple models
-    or versions.
+  when_to_use: When a champion/candidate decision depends on comparing multiple models or versions.
   upstream_prerequisites:
   - model_evaluation_threshold_auditor
   downstream_handoff:
   - promotion_release_gate_agent
   role_type: specialist
   status: experimental
-  prompt_path: agents/training_evaluation_and_registry/specialist/model_comparison_auditor.md
+  prompt_path: agents/06_training_evaluation_and_registry/specialist/model_comparison_auditor.md
+  phase_order: 6
+  agent_order: 40
 - agent_name: memory_and_performance_auditor
-  lifecycle_phase: training_evaluation_and_registry
+  lifecycle_phase: 06_training_evaluation_and_registry
   role: Performance, memory, and scalability specialist.
-  when_to_use: When training or inference scale, memory pressure, or runtime efficiency
-    are material production risks.
+  when_to_use: When training or inference scale, memory pressure, or runtime efficiency are material production risks.
   upstream_prerequisites:
   - training_pipeline_auditor
   downstream_handoff:
@@ -486,12 +521,13 @@ agents:
   - production_readiness_auditor
   role_type: specialist
   status: experimental
-  prompt_path: agents/training_evaluation_and_registry/specialist/memory_and_performance_auditor.md
+  prompt_path: agents/06_training_evaluation_and_registry/specialist/memory_and_performance_auditor.md
+  phase_order: 6
+  agent_order: 50
 - agent_name: inference_pipeline_auditor
-  lifecycle_phase: inference_outputs_and_decisioning
+  lifecycle_phase: 07_inference_outputs_and_decisioning
   role: Inference determinism, feature parity, and output-safety audit.
-  when_to_use: Before production scoring or when inference behavior may diverge from
-    training assumptions.
+  when_to_use: Before production scoring or when inference behavior may diverge from training assumptions.
   upstream_prerequisites:
   - feature_engineering_auditor
   - mlflow_registry_auditor
@@ -502,12 +538,13 @@ agents:
   - model_monitoring_auditor
   role_type: primary
   status: active
-  prompt_path: agents/inference_outputs_and_decisioning/primary/inference_pipeline_auditor.md
+  prompt_path: agents/07_inference_outputs_and_decisioning/primary/inference_pipeline_auditor.md
+  phase_order: 7
+  agent_order: 10
 - agent_name: offline_to_online_consistency_auditor
-  lifecycle_phase: inference_outputs_and_decisioning
+  lifecycle_phase: 07_inference_outputs_and_decisioning
   role: Offline-vs-serving parity specialist.
-  when_to_use: When preprocessing, feature order, categorical handling, or runtime
-    behavior may skew online predictions.
+  when_to_use: When preprocessing, feature order, categorical handling, or runtime behavior may skew online predictions.
   upstream_prerequisites:
   - inference_pipeline_auditor
   - feature_availability_at_time_auditor
@@ -516,12 +553,13 @@ agents:
   - integration_consistency
   role_type: primary
   status: active
-  prompt_path: agents/inference_outputs_and_decisioning/primary/offline_to_online_consistency_auditor.md
+  prompt_path: agents/07_inference_outputs_and_decisioning/primary/offline_to_online_consistency_auditor.md
+  phase_order: 7
+  agent_order: 20
 - agent_name: output_artifacts_auditor
-  lifecycle_phase: inference_outputs_and_decisioning
+  lifecycle_phase: 07_inference_outputs_and_decisioning
   role: Output schema, artifact completeness, and downstream-consumption audit.
-  when_to_use: When prediction tables, reports, manifests, or metadata-bearing outputs
-    need contract review.
+  when_to_use: When prediction tables, reports, manifests, or metadata-bearing outputs need contract review.
   upstream_prerequisites:
   - inference_pipeline_auditor
   downstream_handoff:
@@ -529,12 +567,13 @@ agents:
   - production_readiness_auditor
   role_type: primary
   status: active
-  prompt_path: agents/inference_outputs_and_decisioning/primary/output_artifacts_auditor.md
+  prompt_path: agents/07_inference_outputs_and_decisioning/primary/output_artifacts_auditor.md
+  phase_order: 7
+  agent_order: 30
 - agent_name: promotion_release_gate_agent
-  lifecycle_phase: inference_outputs_and_decisioning
+  lifecycle_phase: 07_inference_outputs_and_decisioning
   role: Candidate promotion and release-decision gate.
-  when_to_use: After evaluation and registry evidence exist and before activating
-    a candidate in production.
+  when_to_use: After evaluation and registry evidence exist and before activating a candidate in production.
   upstream_prerequisites:
   - model_evaluation_threshold_auditor
   - model_comparison_auditor
@@ -544,12 +583,13 @@ agents:
   - incident_rollback_readiness_agent
   role_type: child
   status: active
-  prompt_path: agents/inference_outputs_and_decisioning/primary/promotion_release_gate_agent.md
+  prompt_path: agents/07_inference_outputs_and_decisioning/primary/promotion_release_gate_agent.md
+  phase_order: 7
+  agent_order: 40
 - agent_name: model_monitoring_auditor
-  lifecycle_phase: monitoring_operational_resilience
+  lifecycle_phase: 08_monitoring_operational_resilience
   role: Monitoring completeness, delayed-performance, and alerting audit.
-  when_to_use: Before or during production operation to validate monitoring windows,
-    metadata, and alert quality.
+  when_to_use: Before or during production operation to validate monitoring windows, metadata, and alert quality.
   upstream_prerequisites:
   - inference_pipeline_auditor
   - label_target_definition_agent
@@ -559,9 +599,11 @@ agents:
   - end_to_end_ml_auditor
   role_type: primary
   status: active
-  prompt_path: agents/monitoring_operational_resilience/primary/model_monitoring_auditor.md
+  prompt_path: agents/08_monitoring_operational_resilience/primary/model_monitoring_auditor.md
+  phase_order: 8
+  agent_order: 10
 - agent_name: data_drift_auditor
-  lifecycle_phase: monitoring_operational_resilience
+  lifecycle_phase: 08_monitoring_operational_resilience
   role: Dataset-shift, feature-drift, and population-stability audit.
   when_to_use: When production data may no longer resemble training or baseline distributions.
   upstream_prerequisites:
@@ -571,12 +613,13 @@ agents:
   - end_to_end_ml_auditor
   role_type: primary
   status: active
-  prompt_path: agents/monitoring_operational_resilience/primary/data_drift_auditor.md
+  prompt_path: agents/08_monitoring_operational_resilience/primary/data_drift_auditor.md
+  phase_order: 8
+  agent_order: 20
 - agent_name: testing_and_validation_auditor
-  lifecycle_phase: monitoring_operational_resilience
+  lifecycle_phase: 08_monitoring_operational_resilience
   role: System-level testing, runtime assertion, and smoke-test audit.
-  when_to_use: When pipeline-level validations and fail-fast coverage need a primary
-    review.
+  when_to_use: When pipeline-level validations and fail-fast coverage need a primary review.
   upstream_prerequisites:
   - task_triage_router
   downstream_handoff:
@@ -585,12 +628,13 @@ agents:
   - production_readiness_auditor
   role_type: primary
   status: active
-  prompt_path: agents/monitoring_operational_resilience/primary/testing_and_validation_auditor.md
+  prompt_path: agents/08_monitoring_operational_resilience/primary/testing_and_validation_auditor.md
+  phase_order: 8
+  agent_order: 30
 - agent_name: pipeline_idempotency_auditor
-  lifecycle_phase: monitoring_operational_resilience
+  lifecycle_phase: 08_monitoring_operational_resilience
   role: Retry, rerun, duplicate-write, and backfill-safety specialist.
-  when_to_use: When repeated execution of the same partition, job, artifact write,
-    or promotion step must be safe.
+  when_to_use: When repeated execution of the same partition, job, artifact write, or promotion step must be safe.
   upstream_prerequisites:
   - deployment_and_orchestration_auditor
   - testing_and_validation_auditor
@@ -599,12 +643,13 @@ agents:
   - incident_rollback_readiness_agent
   role_type: specialist
   status: active
-  prompt_path: agents/monitoring_operational_resilience/specialist/pipeline_idempotency_auditor.md
+  prompt_path: agents/08_monitoring_operational_resilience/specialist/pipeline_idempotency_auditor.md
+  phase_order: 8
+  agent_order: 40
 - agent_name: silent_fallback_auditor
-  lifecycle_phase: monitoring_operational_resilience
+  lifecycle_phase: 08_monitoring_operational_resilience
   role: Hidden failure and unsafe fallback specialist.
-  when_to_use: When broad exception handling, degraded behavior, or silent data corruption
-    may exist.
+  when_to_use: When broad exception handling, degraded behavior, or silent data corruption may exist.
   upstream_prerequisites:
   - testing_and_validation_auditor
   downstream_handoff:
@@ -612,12 +657,13 @@ agents:
   - end_to_end_ml_auditor
   role_type: specialist
   status: active
-  prompt_path: agents/monitoring_operational_resilience/specialist/silent_fallback_auditor.md
+  prompt_path: agents/08_monitoring_operational_resilience/specialist/silent_fallback_auditor.md
+  phase_order: 8
+  agent_order: 50
 - agent_name: config_governance_auditor
-  lifecycle_phase: monitoring_operational_resilience
+  lifecycle_phase: 08_monitoring_operational_resilience
   role: Configuration hierarchy, overrides, and runtime safety specialist.
-  when_to_use: When parameters, env overrides, and hidden defaults may drift across
-    stages.
+  when_to_use: When parameters, env overrides, and hidden defaults may drift across stages.
   upstream_prerequisites:
   - environment_and_runtime_auditor
   downstream_handoff:
@@ -625,12 +671,13 @@ agents:
   - integration_consistency
   role_type: specialist
   status: active
-  prompt_path: agents/monitoring_operational_resilience/specialist/config_governance_auditor.md
+  prompt_path: agents/08_monitoring_operational_resilience/specialist/config_governance_auditor.md
+  phase_order: 8
+  agent_order: 60
 - agent_name: deployment_and_orchestration_auditor
-  lifecycle_phase: monitoring_operational_resilience
+  lifecycle_phase: 08_monitoring_operational_resilience
   role: Execution-order, schedule, retry, and orchestration-safety audit.
-  when_to_use: When jobs run in production, backfill, or scheduled environments and
-    dependency order matters.
+  when_to_use: When jobs run in production, backfill, or scheduled environments and dependency order matters.
   upstream_prerequisites:
   - multi_agent_orchestrator
   - sql_partition_pruning
@@ -640,13 +687,13 @@ agents:
   - integration_consistency
   role_type: specialist
   status: active
-  prompt_path: agents/monitoring_operational_resilience/specialist/deployment_and_orchestration_auditor.md
+  prompt_path: agents/08_monitoring_operational_resilience/specialist/deployment_and_orchestration_auditor.md
+  phase_order: 8
+  agent_order: 70
 - agent_name: preflight_execution_guard
-  lifecycle_phase: monitoring_operational_resilience
-  role: Fail-fast execution prerequisite guard for training, inference, monitoring,
-    and backfill runs.
-  when_to_use: Immediately before any concrete run that can read, write, register,
-    or promote production assets.
+  lifecycle_phase: 08_monitoring_operational_resilience
+  role: Fail-fast execution prerequisite guard for training, inference, monitoring, and backfill runs.
+  when_to_use: Immediately before any concrete run that can read, write, register, or promote production assets.
   upstream_prerequisites:
   - environment_and_runtime_auditor
   - config_governance_auditor
@@ -657,12 +704,13 @@ agents:
   - model_monitoring_auditor
   role_type: child
   status: active
-  prompt_path: agents/monitoring_operational_resilience/primary/preflight_execution_guard.md
+  prompt_path: agents/08_monitoring_operational_resilience/primary/preflight_execution_guard.md
+  phase_order: 8
+  agent_order: 80
 - agent_name: incident_rollback_readiness_agent
-  lifecycle_phase: monitoring_operational_resilience
+  lifecycle_phase: 08_monitoring_operational_resilience
   role: Rollback-path and incident-procedure readiness audit.
-  when_to_use: Before production approval when a bad model, bad output, or registry
-    mistake must be recoverable.
+  when_to_use: Before production approval when a bad model, bad output, or registry mistake must be recoverable.
   upstream_prerequisites:
   - mlflow_registry_auditor
   - pipeline_idempotency_auditor
@@ -672,24 +720,26 @@ agents:
   - end_to_end_ml_auditor
   role_type: child
   status: active
-  prompt_path: agents/monitoring_operational_resilience/primary/incident_rollback_readiness_agent.md
+  prompt_path: agents/08_monitoring_operational_resilience/primary/incident_rollback_readiness_agent.md
+  phase_order: 8
+  agent_order: 90
 - agent_name: unit_test_coverage_auditor
-  lifecycle_phase: monitoring_operational_resilience
+  lifecycle_phase: 08_monitoring_operational_resilience
   role: Isolated logic and testability specialist under the broader testing domain.
-  when_to_use: When pure-function coverage, deterministic helpers, or untestable logic
-    patterns need focused review.
+  when_to_use: When pure-function coverage, deterministic helpers, or untestable logic patterns need focused review.
   upstream_prerequisites:
   - testing_and_validation_auditor
   downstream_handoff:
   - acceptance_criteria_verifier
   role_type: specialist
   status: experimental
-  prompt_path: agents/monitoring_operational_resilience/specialist/unit_test_coverage_auditor.md
+  prompt_path: agents/08_monitoring_operational_resilience/specialist/unit_test_coverage_auditor.md
+  phase_order: 8
+  agent_order: 100
 - agent_name: integration_consistency
-  lifecycle_phase: final_integration_and_release_gates
+  lifecycle_phase: 09_final_integration_and_release_gates
   role: Cross-component contract, config, schema, and dependency alignment gate.
-  when_to_use: First in the final gate sequence after component-level outputs and
-    contracts exist.
+  when_to_use: First in the final gate sequence after component-level outputs and contracts exist.
   upstream_prerequisites:
   - contract_compiler_validator
   - output_artifacts_auditor
@@ -699,12 +749,13 @@ agents:
   - production_readiness_auditor
   role_type: primary
   status: active
-  prompt_path: agents/final_integration_and_release_gates/primary/integration_consistency.md
+  prompt_path: agents/09_final_integration_and_release_gates/primary/integration_consistency.md
+  phase_order: 9
+  agent_order: 10
 - agent_name: production_readiness_auditor
-  lifecycle_phase: final_integration_and_release_gates
+  lifecycle_phase: 09_final_integration_and_release_gates
   role: Production execution safety, observability, and handover readiness gate.
-  when_to_use: Second in the final gate sequence after integration compatibility has
-    been established.
+  when_to_use: Second in the final gate sequence after integration compatibility has been established.
   upstream_prerequisites:
   - integration_consistency
   - preflight_execution_guard
@@ -713,12 +764,13 @@ agents:
   - end_to_end_ml_auditor
   role_type: primary
   status: active
-  prompt_path: agents/final_integration_and_release_gates/primary/production_readiness_auditor.md
+  prompt_path: agents/09_final_integration_and_release_gates/primary/production_readiness_auditor.md
+  phase_order: 9
+  agent_order: 20
 - agent_name: end_to_end_ml_auditor
-  lifecycle_phase: final_integration_and_release_gates
+  lifecycle_phase: 09_final_integration_and_release_gates
   role: Final full-system readiness gate across the complete ML lifecycle.
-  when_to_use: Third in the final gate sequence when all major specialist outputs
-    are available.
+  when_to_use: Third in the final gate sequence when all major specialist outputs are available.
   upstream_prerequisites:
   - production_readiness_auditor
   - model_monitoring_auditor
@@ -727,19 +779,22 @@ agents:
   - acceptance_criteria_verifier
   role_type: primary
   status: active
-  prompt_path: agents/final_integration_and_release_gates/primary/end_to_end_ml_auditor.md
+  prompt_path: agents/09_final_integration_and_release_gates/primary/end_to_end_ml_auditor.md
+  phase_order: 9
+  agent_order: 30
 - agent_name: acceptance_criteria_verifier
-  lifecycle_phase: final_integration_and_release_gates
+  lifecycle_phase: 09_final_integration_and_release_gates
   role: Task-closure gate against original requirements and evidence.
-  when_to_use: Last in the final gate sequence to decide whether the requested work
-    is actually complete.
+  when_to_use: Last in the final gate sequence to decide whether the requested work is actually complete.
   upstream_prerequisites:
   - end_to_end_ml_auditor
   - documentation_runbook_auditor
   downstream_handoff: []
   role_type: primary
   status: active
-  prompt_path: agents/final_integration_and_release_gates/primary/acceptance_criteria_verifier.md
+  prompt_path: agents/09_final_integration_and_release_gates/primary/acceptance_criteria_verifier.md
+  phase_order: 9
+  agent_order: 40
 supported_status_lifecycle:
 - active
 - experimental

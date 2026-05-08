@@ -8,6 +8,7 @@
 - `agent_framework/shared_prompt_template.md`
 - `agent_framework/shared_contract_envelope.yaml`
 - `agent_framework/agent_registry.yaml`
+- numbered lifecycle folders under `agents/01_...` through `agents/09_...`
 - five new agent prompts:
   - `contract_compiler_validator`
   - `label_target_definition_agent`
@@ -102,9 +103,11 @@ The following prompts were intentionally left unchanged because the meta-review 
 - Primary agents own the default lifecycle responsibility for a phase or major stage.
 - Specialist agents are narrower controls that should usually be routed by a primary agent or orchestrator.
 - Child agents are framework-supporting agents added to fill missing lifecycle mechanics such as contract compilation, preflight gating, release gating, and rollback readiness.
+- Lifecycle folder numbering expresses the default project sequence at the filesystem level.
+- `phase_order` and `agent_order` provide the canonical automation order without numbering prompt filenames.
 
 ## Open Questions
 
-1. Whether prompt files should remain extensionless or later move to an explicit `.md` or `.prompt` convention.
+1. Whether `agent_order` should remain a lightweight recommended default or later become dependency-derived automatically.
 2. Whether older prompts should be incrementally migrated to the shared template as they are next edited, rather than mass-rewritten now.
 3. Whether contract-producing prompts should later be updated to write into a unified `contracts/` directory instead of mixed legacy paths under `configs/` and `data/`.

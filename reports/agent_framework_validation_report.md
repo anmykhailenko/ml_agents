@@ -5,10 +5,12 @@
 - registry agents validated: 53
 - missing prompt paths: 0
 - supported status lifecycle: active, experimental, deprecated, archived
+- lifecycle folders validated: 9 numbered phases in chronological order
 
 ## Path Validation
 
 - PASS: all registry `prompt_path` values resolve to existing files.
+- PASS: no legacy unnumbered lifecycle paths remain in framework metadata, reports, or prompt front matter.
 
 ## Role Bucket Rules
 
@@ -23,8 +25,8 @@
 
 - `agent_framework/agent_dependencies.yaml`
 - `agent_framework/agent_lifecycle_map.yaml`
-- `agent_framework/agent_registry.yaml` updated with explicit `prompt_path`, `role_type`, and status lifecycle support.
+- `agent_framework/agent_registry.yaml` updated with explicit `prompt_path`, `role_type`, `phase_order`, and `agent_order` metadata.
 
 ## Open Notes
 
-- No core prompt bodies were rewritten beyond metadata front matter insertion and filesystem relocation to `.md` paths.
+- No core prompt bodies were rewritten during lifecycle renaming; changes were limited to metadata front matter and path updates.

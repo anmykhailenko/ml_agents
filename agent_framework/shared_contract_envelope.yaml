@@ -1,30 +1,27 @@
 schema_name: shared_contract_envelope
-schema_version: "1.0.0"
-description: >
-  Canonical envelope for machine-readable contracts produced by agents in the ML
-  multi-agent framework. Domain-specific payloads should be nested under
-  `contract_payload` while preserving this envelope unchanged.
+schema_version: 1.0.0
+description: 'Canonical envelope for machine-readable contracts produced by agents in the ML multi-agent framework. Domain-specific payloads should be nested under `contract_payload` while preserving this envelope unchanged.
 
+  '
 required_fields:
-  - contract_type
-  - contract_name
-  - version
-  - owner
-  - status
-  - lifecycle_phase
-  - primary_agent
-  - upstream_dependencies
-  - downstream_consumers
-  - entity_grain
-  - time_grain
-  - partition_key
-  - required_inputs
-  - required_outputs
-  - validation_rules
-  - assumptions
-  - open_questions
-  - contract_payload
-
+- contract_type
+- contract_name
+- version
+- owner
+- status
+- lifecycle_phase
+- primary_agent
+- upstream_dependencies
+- downstream_consumers
+- entity_grain
+- time_grain
+- partition_key
+- required_inputs
+- required_outputs
+- validation_rules
+- assumptions
+- open_questions
+- contract_payload
 field_schema:
   contract_type:
     type: string
@@ -41,23 +38,23 @@ field_schema:
   status:
     type: string
     allowed_values:
-      - draft
-      - active
-      - deprecated
-      - blocked
+    - draft
+    - active
+    - deprecated
+    - blocked
     description: Governance state of the contract.
   lifecycle_phase:
     type: string
     allowed_values:
-      - intake_and_scope
-      - repository_runtime_foundation
-      - exploratory_analysis_and_metric_definition
-      - data_foundation_and_contracts
-      - dataset_feature_target_integrity
-      - training_evaluation_and_registry
-      - inference_outputs_and_decisioning
-      - monitoring_operational_resilience
-      - final_integration_and_release_gates
+    - 01_intake_and_scope
+    - 02_repository_runtime_foundation
+    - 03_exploratory_analysis_and_metric_definition
+    - 04_data_foundation_and_contracts
+    - 05_dataset_feature_target_integrity
+    - 06_training_evaluation_and_registry
+    - 07_inference_outputs_and_decisioning
+    - 08_monitoring_operational_resilience
+    - 09_final_integration_and_release_gates
   primary_agent:
     type: string
     description: Canonical agent responsible for producing or governing the contract.
@@ -115,16 +112,14 @@ field_schema:
   contract_payload:
     type: map
     description: Domain-specific body owned by the producing agent.
-
 shared_severity_scale:
-  - CRITICAL
-  - HIGH
-  - MEDIUM
-  - LOW
-
+- CRITICAL
+- HIGH
+- MEDIUM
+- LOW
 shared_validation_statuses:
-  - PASS
-  - FAIL
-  - PARTIAL
-  - NOT_VERIFIED
-  - NOT_APPLICABLE
+- PASS
+- FAIL
+- PARTIAL
+- NOT_VERIFIED
+- NOT_APPLICABLE

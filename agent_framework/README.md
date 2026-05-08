@@ -20,15 +20,15 @@ High-level layout:
 
 ## Canonical Lifecycle
 
-1. `intake_and_scope`
-2. `repository_runtime_foundation`
-3. `exploratory_analysis_and_metric_definition`
-4. `data_foundation_and_contracts`
-5. `dataset_feature_target_integrity`
-6. `training_evaluation_and_registry`
-7. `inference_outputs_and_decisioning`
-8. `monitoring_operational_resilience`
-9. `final_integration_and_release_gates`
+1. `01_intake_and_scope`
+2. `02_repository_runtime_foundation`
+3. `03_exploratory_analysis_and_metric_definition`
+4. `04_data_foundation_and_contracts`
+5. `05_dataset_feature_target_integrity`
+6. `06_training_evaluation_and_registry`
+7. `07_inference_outputs_and_decisioning`
+8. `08_monitoring_operational_resilience`
+9. `09_final_integration_and_release_gates`
 
 ## Strict Final Gate Order
 
