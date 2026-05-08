@@ -47,6 +47,10 @@ Default rule:
 - start with the smallest useful set
 - add specialists only when a risk, dependency, or project stage justifies them
 
+Scientific rigor rule:
+- add `statistical_validity_auditor`, `experimental_design_and_causal_inference_auditor`, or `sampling_and_representativeness_auditor` only when conclusions depend on statistical, causal, or population-validity claims
+- treat them as optional specialist gates, not default requirements for every project
+
 ## Recommended Workflow For A New ML Project
 
 For a new project, use the lifecycle in order.
@@ -59,6 +63,7 @@ For a new project, use the lifecycle in order.
    Typical agents: `ml_repository_architect`, `environment_and_runtime_auditor`, `dependency_package_auditor`.
 4. Define analytical framing.
    Typical agents: `eda_auditor`, `analytical_metrics_auditor`.
+   Optional scientific rigor adds: `statistical_validity_auditor`, `experimental_design_and_causal_inference_auditor`, `sampling_and_representativeness_auditor`.
 5. Lock down data contracts before heavy feature work.
    Typical agents: `warehouse_metadata_extractor`, `data_source_contract_auditor`, `schema_mapping`, `sql_generator`.
 6. Validate target and feature integrity before training.
@@ -89,6 +94,9 @@ Add these based on what you find:
 - `join_integrity` if source joins are unclear
 - `business_logic_auditor` if score meaning or downstream use is ambiguous
 - `offline_to_online_consistency_auditor` if a deployed scoring path already exists
+- `sampling_and_representativeness_auditor` if sampled datasets may not match the training or production population
+- `statistical_validity_auditor` if metrics or reported improvements drive high-stakes conclusions
+- `experimental_design_and_causal_inference_auditor` if the project makes incrementality, uplift, or causal claims
 
 The goal for a messy project is to restore trust in structure, contracts, target logic, and training validity before optimizing anything else.
 
@@ -108,6 +116,7 @@ Recommended default:
 Optional adds:
 - `feature_engineering_auditor` if feature complexity is growing
 - `output_artifacts_auditor` if you are handing predictions to another team
+- `statistical_validity_auditor` if a small validation set or noisy uplift claim could mislead decisions
 
 Usually skip:
 - most monitoring agents
@@ -122,6 +131,7 @@ Recommended path:
 1. Intake and scope: `task_triage_router`, `multi_agent_orchestrator`
 2. Foundation: `ml_repository_architect`, `environment_and_runtime_auditor`, `dependency_package_auditor`, `security_auditor`, `documentation_runbook_auditor`
 3. Analytical framing: `eda_auditor`, `analytical_metrics_auditor`
+   Optional scientific rigor gates when needed: `statistical_validity_auditor`, `experimental_design_and_causal_inference_auditor`, `sampling_and_representativeness_auditor`
 4. Data contracts: `warehouse_metadata_extractor`, `data_source_contract_auditor`, `schema_mapping`, `sql_generator`, `contract_compiler_validator`
 5. Dataset integrity: `label_target_definition_agent`, `label_quality_and_ground_truth_auditor`, `temporal_leakage_auditor`, `feature_availability_at_time_auditor`, `feature_engineering_auditor`
 6. Training and registry: `training_pipeline_auditor`, `model_evaluation_threshold_auditor`, `mlflow_registry_auditor`
@@ -145,6 +155,7 @@ Recommended path:
 Useful optional agents:
 - `business_insight_quality_auditor` if the assignment expects interpretation
 - `documentation_runbook_auditor` if submission clarity matters
+- `statistical_validity_auditor` if the assignment makes statistical significance or confidence claims
 
 Usually skip:
 - registry and deployment agents
@@ -160,7 +171,7 @@ Use phases as the default filter.
 - `02_repository_runtime_foundation`
   Use when repo structure, runtime setup, packages, documentation, or security may block reliable work.
 - `03_exploratory_analysis_and_metric_definition`
-  Use when KPI definitions, cohorts, EDA, or business insight quality need review.
+  Use when KPI definitions, cohorts, EDA, business insight quality, statistical rigor, causal claims, or sampling validity need review.
 - `04_data_foundation_and_contracts`
   Use before dataset building, SQL generation, or schema-heavy work.
 - `05_dataset_feature_target_integrity`

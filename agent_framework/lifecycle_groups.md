@@ -47,11 +47,15 @@ Specialist agents:
 - `wau_mau_dau_consistency_auditor`
 - `cohort_logic_auditor`
 - `segment_naming_stability_auditor`
+- `statistical_validity_auditor`
+- `experimental_design_and_causal_inference_auditor`
+- `sampling_and_representativeness_auditor`
 
 Purpose:
 - validate analytical framing before pipeline hardening
 - make KPI definitions explicit
 - protect cohort, active-user, and segmentation correctness
+- provide an optional Scientific Rigor specialist layer when conclusions depend on statistical, causal, or sampling validity
 
 ## 4. Data Foundation And Contracts
 

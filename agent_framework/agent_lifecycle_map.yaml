@@ -64,6 +64,15 @@ phases:
   - agent_name: segment_naming_stability_auditor
     status: experimental
     prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/segment_naming_stability_auditor.md
+  - agent_name: statistical_validity_auditor
+    status: active
+    prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/statistical_validity_auditor.md
+  - agent_name: experimental_design_and_causal_inference_auditor
+    status: active
+    prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/experimental_design_and_causal_inference_auditor.md
+  - agent_name: sampling_and_representativeness_auditor
+    status: active
+    prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/sampling_and_representativeness_auditor.md
   child: []
 - lifecycle_phase: 04_data_foundation_and_contracts
   primary:

@@ -173,6 +173,8 @@ agents:
   - eda_auditor
   downstream_handoff:
   - business_insight_quality_auditor
+  - statistical_validity_auditor
+  - sampling_and_representativeness_auditor
   - model_monitoring_auditor
   role_type: primary
   status: active
@@ -213,6 +215,7 @@ agents:
   upstream_prerequisites:
   - analytical_metrics_auditor
   downstream_handoff:
+  - experimental_design_and_causal_inference_auditor
   - label_target_definition_agent
   - model_monitoring_auditor
   role_type: specialist
@@ -234,6 +237,56 @@ agents:
   prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/segment_naming_stability_auditor.md
   phase_order: 3
   agent_order: 60
+- agent_name: statistical_validity_auditor
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
+  role: Statistical correctness, uncertainty, and inference validity specialist.
+  when_to_use: When conclusions depend on confidence intervals, significance claims, sample sizes, or quantitative comparisons.
+  upstream_prerequisites:
+  - analytical_metrics_auditor
+  - model_evaluation_threshold_auditor
+  downstream_handoff:
+  - business_insight_quality_auditor
+  - model_comparison_auditor
+  - acceptance_criteria_verifier
+  role_type: specialist
+  status: active
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/statistical_validity_auditor.md
+  phase_order: 3
+  agent_order: 70
+- agent_name: experimental_design_and_causal_inference_auditor
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
+  role: Experimental design, assignment, and causal-claim validity specialist.
+  when_to_use: When A/B tests, uplift, response modeling, or observational analyses support causal business conclusions.
+  upstream_prerequisites:
+  - cohort_logic_auditor
+  - business_logic_auditor
+  - analytical_metrics_auditor
+  downstream_handoff:
+  - model_evaluation_threshold_auditor
+  - output_artifacts_auditor
+  - acceptance_criteria_verifier
+  role_type: specialist
+  status: active
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/experimental_design_and_causal_inference_auditor.md
+  phase_order: 3
+  agent_order: 80
+- agent_name: sampling_and_representativeness_auditor
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
+  role: Sampling strategy, population match, and representativeness specialist.
+  when_to_use: When sampled data must generalize to the intended training, evaluation, or production decision population.
+  upstream_prerequisites:
+  - warehouse_metadata_extractor
+  - data_source_contract_auditor
+  - analytical_metrics_auditor
+  downstream_handoff:
+  - label_target_definition_agent
+  - training_pipeline_auditor
+  - data_drift_auditor
+  role_type: specialist
+  status: active
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/sampling_and_representativeness_auditor.md
+  phase_order: 3
+  agent_order: 90
 - agent_name: warehouse_metadata_extractor
   lifecycle_phase: 04_data_foundation_and_contracts
   role: Metadata discovery, profiling, key inference, and source inventory.
@@ -242,6 +295,7 @@ agents:
   - multi_agent_orchestrator
   downstream_handoff:
   - data_source_contract_auditor
+  - sampling_and_representativeness_auditor
   - schema_mapping
   role_type: primary
   status: active
@@ -255,6 +309,7 @@ agents:
   upstream_prerequisites:
   - warehouse_metadata_extractor
   downstream_handoff:
+  - sampling_and_representativeness_auditor
   - schema_mapping
   - sql_generator
   - contract_compiler_validator
@@ -440,6 +495,7 @@ agents:
   - segment_naming_stability_auditor
   - inference_pipeline_auditor
   downstream_handoff:
+  - experimental_design_and_causal_inference_auditor
   - output_artifacts_auditor
   - end_to_end_ml_auditor
   role_type: specialist
@@ -473,6 +529,7 @@ agents:
   - training_pipeline_auditor
   - label_target_definition_agent
   downstream_handoff:
+  - statistical_validity_auditor
   - model_comparison_auditor
   - promotion_release_gate_agent
   - model_monitoring_auditor

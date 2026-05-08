@@ -130,6 +130,8 @@ agents:
   - eda_auditor
   downstream_dependencies:
   - business_insight_quality_auditor
+  - statistical_validity_auditor
+  - sampling_and_representativeness_auditor
   - model_monitoring_auditor
 - agent_name: business_insight_quality_auditor
   lifecycle_phase: 03_exploratory_analysis_and_metric_definition
@@ -158,6 +160,7 @@ agents:
   upstream_dependencies:
   - analytical_metrics_auditor
   downstream_dependencies:
+  - experimental_design_and_causal_inference_auditor
   - label_target_definition_agent
   - model_monitoring_auditor
 - agent_name: segment_naming_stability_auditor
@@ -170,6 +173,44 @@ agents:
   downstream_dependencies:
   - business_logic_auditor
   - output_artifacts_auditor
+- agent_name: statistical_validity_auditor
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
+  role_type: specialist
+  status: active
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/statistical_validity_auditor.md
+  upstream_dependencies:
+  - analytical_metrics_auditor
+  - model_evaluation_threshold_auditor
+  downstream_dependencies:
+  - business_insight_quality_auditor
+  - model_comparison_auditor
+  - acceptance_criteria_verifier
+- agent_name: experimental_design_and_causal_inference_auditor
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
+  role_type: specialist
+  status: active
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/experimental_design_and_causal_inference_auditor.md
+  upstream_dependencies:
+  - cohort_logic_auditor
+  - business_logic_auditor
+  - analytical_metrics_auditor
+  downstream_dependencies:
+  - model_evaluation_threshold_auditor
+  - output_artifacts_auditor
+  - acceptance_criteria_verifier
+- agent_name: sampling_and_representativeness_auditor
+  lifecycle_phase: 03_exploratory_analysis_and_metric_definition
+  role_type: specialist
+  status: active
+  prompt_path: agents/03_exploratory_analysis_and_metric_definition/specialist/sampling_and_representativeness_auditor.md
+  upstream_dependencies:
+  - warehouse_metadata_extractor
+  - data_source_contract_auditor
+  - analytical_metrics_auditor
+  downstream_dependencies:
+  - label_target_definition_agent
+  - training_pipeline_auditor
+  - data_drift_auditor
 - agent_name: warehouse_metadata_extractor
   lifecycle_phase: 04_data_foundation_and_contracts
   role_type: primary
@@ -179,6 +220,7 @@ agents:
   - multi_agent_orchestrator
   downstream_dependencies:
   - data_source_contract_auditor
+  - sampling_and_representativeness_auditor
   - schema_mapping
 - agent_name: data_source_contract_auditor
   lifecycle_phase: 04_data_foundation_and_contracts
@@ -188,6 +230,7 @@ agents:
   upstream_dependencies:
   - warehouse_metadata_extractor
   downstream_dependencies:
+  - sampling_and_representativeness_auditor
   - schema_mapping
   - sql_generator
   - contract_compiler_validator
@@ -325,6 +368,7 @@ agents:
   - segment_naming_stability_auditor
   - inference_pipeline_auditor
   downstream_dependencies:
+  - experimental_design_and_causal_inference_auditor
   - output_artifacts_auditor
   - end_to_end_ml_auditor
 - agent_name: training_pipeline_auditor
@@ -350,6 +394,7 @@ agents:
   - training_pipeline_auditor
   - label_target_definition_agent
   downstream_dependencies:
+  - statistical_validity_auditor
   - model_comparison_auditor
   - promotion_release_gate_agent
   - model_monitoring_auditor

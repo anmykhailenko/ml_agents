@@ -19,6 +19,15 @@ Prompt files are stored as Markdown prompts with YAML front matter:
 - `reports/`
   Meta-review and framework implementation reports.
 
+## Scientific Rigor Specialist Layer
+
+The framework includes an optional Scientific Rigor specialist layer for cases where conclusions depend on:
+- statistical validity
+- causal or experimental validity
+- sampling and representativeness validity
+
+These are specialist gates, not default primary agents. Use them when ML, analytics, experimentation, uplift, response modeling, or business decisioning claims need deeper rigor before downstream sign-off.
+
 ## Choose Agents By Phase
 
 ### 1. Intake and scope
@@ -42,7 +51,7 @@ Use this phase when environment assumptions, repository layout, dependencies, se
 Use:
 - `agents/03_exploratory_analysis_and_metric_definition/`
 
-Use this phase when KPI definitions, cohort logic, active-user logic, segment naming, EDA quality, or business insight quality need to be established.
+Use this phase when KPI definitions, cohort logic, active-user logic, segment naming, EDA quality, business insight quality, or scientific rigor around statistics, causal claims, and sampling validity need to be established.
 
 ### 4. Data foundation and contracts
 
